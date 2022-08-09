@@ -3,13 +3,29 @@ package com.jcn.businesscard.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.observe
+import com.jcn.businesscard.App
 import com.jcn.businesscard.R
+import com.jcn.businesscard.data.BusinessCardAdapter
+import com.jcn.businesscard.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
+
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory((application as App).repository)
+    }
+
+    private val adapter by lazy {BusinessCardAdapter()}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        rv_cards.adapter = adapter
+        getAllBusinessCard()
         insertListener()
     }
 
@@ -19,5 +35,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    private fun getAllBusinessCard() {
+        mainViewModel.getAll().observe(this) { businessCards ->
+            adapter.submitList(businessCards)
+        }
     }
 }
