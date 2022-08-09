@@ -9,6 +9,7 @@ import com.jcn.businesscard.App
 import com.jcn.businesscard.R
 import com.jcn.businesscard.data.BusinessCardAdapter
 import com.jcn.businesscard.databinding.ActivityMainBinding
+import com.jcn.businesscard.util.Image
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             val intent = Intent(this@MainActivity, AddBusinessCardActivity::class.java)
             startActivity(intent)
+        }
+        adapter.listenerShare = {card ->
+            Image.share(this@MainActivity, card)
         }
 
     }
